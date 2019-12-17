@@ -1,5 +1,8 @@
 package ru.job4j.total.view;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.List;
 
 import ru.job4j.total.R;
@@ -22,9 +27,11 @@ public class TotalRecyclerAdapter extends RecyclerView.Adapter<TotalRecyclerAdap
 
     private List<FileModel> fileModels;
     private String parentAbsolutePath;
+    AppCompatActivity activity;
 
-    public TotalRecyclerAdapter(List<FileModel> fileModels) {
+    public TotalRecyclerAdapter(List<FileModel> fileModels, AppCompatActivity activity) {
         this.fileModels = fileModels;
+        this.activity = activity;
     }
 
     @NonNull
@@ -38,11 +45,13 @@ public class TotalRecyclerAdapter extends RecyclerView.Adapter<TotalRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull TotalViewHolder holder, final int position) {
 
+        final FileModel currentFile = fileModels.get(position);
+
         TextView textView = holder.itemView.findViewById(R.id.textView);
-        textView.setText("" + fileModels.get(position).getName());
+        textView.setText("" + currentFile.getName());
 
         ImageView imageView = holder.itemView.findViewById(R.id.imageView);
-        if (fileModels.get(position).getDirectory()) {
+        if (currentFile.getDirectory()) {
             Glide.with(imageView).load(R.drawable.ic_folder_black_24dp).into(imageView);
         } else {
             Glide.with(imageView).load(R.drawable.ic_insert_drive_file_black_24dp).into(imageView);
@@ -53,6 +62,14 @@ public class TotalRecyclerAdapter extends RecyclerView.Adapter<TotalRecyclerAdap
         itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (currentFile.getName().contains(".")) {
+                    if ((currentFile.getName().substring(currentFile.getName().lastIndexOf("."))).equals("mp3")) {
+                        Log.d("audio", "onClick: " + currentFile.getAbsolutePath());
+                        Intent intent = new Intent("audio/mp3", (Uri.parse(currentFile.getAbsolutePath())));
+                        activity.startActivity(intent);
+                    }
+                }
+
                 ITree fileTree = new FileTree();
                 parentAbsolutePath = fileModels.get(position).getAbsolutePath();
                 List<FileModel> list;

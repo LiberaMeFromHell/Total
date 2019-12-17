@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView(List<FileModel> dirs) {
         RecyclerView recyclerView = findViewById(R.id.recycler);
-        adapter = new TotalRecyclerAdapter(dirs);
+        adapter = new TotalRecyclerAdapter(dirs, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

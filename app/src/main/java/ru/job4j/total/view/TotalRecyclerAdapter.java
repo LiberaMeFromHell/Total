@@ -27,7 +27,7 @@ public class TotalRecyclerAdapter extends RecyclerView.Adapter<TotalRecyclerAdap
 
     private List<FileModel> fileModels;
     private String parentAbsolutePath;
-    AppCompatActivity activity;
+    private AppCompatActivity activity;
 
     public TotalRecyclerAdapter(List<FileModel> fileModels, AppCompatActivity activity) {
         this.fileModels = fileModels;

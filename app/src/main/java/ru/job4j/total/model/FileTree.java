@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FileTree implements ITree {
@@ -18,21 +19,17 @@ public class FileTree implements ITree {
 
         File parent = new File(absolutePath);
         if (!parent.isDirectory()) {
-            return null;
+            return Collections.emptyList();
         }
 
         File[] children = new File(absolutePath).listFiles();
 
         List<FileModel> childrenList = new ArrayList<>();
-        if (childrenList != null) {
-            for (File child :
-                    children) {
-                childrenList.add(new FileModel(child.getAbsolutePath(), child.getName(), child.isDirectory()));
-            }
-            return childrenList;
-        } else {
-            return null;
+        for (File child :
+                children) {
+            childrenList.add(new FileModel(child.getAbsolutePath(), child.getName(), child.isDirectory()));
         }
+        return childrenList;
     }
 
     public FileModel getParentByChild(String childAbsolutePath) {
